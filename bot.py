@@ -7,7 +7,6 @@ from collections import OrderedDict
 
 import telegram
 from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, RegexHandler, Filters
-# from telegram.contrib.botan import Botan
 from telegram import InlineKeyboardButton as ikb
 from telegram import InlineKeyboardMarkup as ik
 from sqlalchemy import create_engine
@@ -23,41 +22,17 @@ now = datetime.datetime.now
 # constant for sending 'typing...'
 typing = telegram.ChatAction.TYPING
 
-# Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-logger = logging.getLogger('StoreBot.' + __name__)
-
-# botan
-# btrack = Botan(botan_token).track
 
 # keyboards
-send_contact_kbd = [[telegram.KeyboardButton(texts.send_contact, request_contact=True)]]
+
 main_kbd_user = [[texts.catalog_btn_user, texts.cart_btn_user],
                  [texts.orders_btn_user, texts.info_btn_user]]
-main_kbd_admin = [[texts.orders_btn_admin, texts.edit_btn_admin],
-                  [texts.stat_btn_admin, texts.info_btn_admin]]
-to_cart_kbd = [[texts.confirm_order_btn], [texts.to_cat_btn], [texts.main_menu_btn]]
-delivery_methods_kbd = [[texts.delivery_carrier_btn], [texts.delivery_pickup_btn], [texts.main_menu_btn]]
-pickup_points = [[point] for point in texts.pickup_point] + [[texts.main_menu_btn]]
-orders_sort_kbd = [[texts.active_orders_btn], [texts.date_orders_btn], [texts.archive_orders_btn],
-                   [texts.main_menu_btn]]
-order_status_kbd = [[texts.default_order_status], [texts.order_status_delivery], [texts.order_status_pickup],
-                    [texts.order_status_completed], [texts.cancel_status_input_btn]]
-stat_type_kbd = [[texts.static_stat_btn, texts.dynamic_stat_btn], [texts.main_menu_btn]]
-to_item_list_kbd = [[texts.to_item_list_btn]]
+
+
 
 # inline keyboard for catalog
 catalog_ikbd = [[ikb(texts.prev_btn, callback_data="<"), ikb(texts.next_btn, callback_data=">")],
                 [ikb(texts.show_img_btn, callback_data="img")], [ikb(texts.to_cart_btn, callback_data="to_cart")]]
-# inline keyboard for cart
-cart_item_ikbd = [[ikb(texts.cart_item_dec1_btn, callback_data="cart-1"),
-                   ikb(texts.cart_item_del_btn, callback_data="cart_del"),
-                   ikb(texts.cart_item_inc1_btn, callback_data="cart+1")]]
-# inline keyboard for cart summary
-cart_sum_ikbd = [[ikb(texts.cart_decline_btn, callback_data="del_all"),
-                  ikb(texts.cart_confirm_btn, callback_data="confirm_all")]]
-# inline keyboard for admin to edit order status
-edit_order_ikbd = [[ikb(texts.edit_order_status_btn, callback_data="edit_order_status")]]
 
 with open('data.json', 'r', encoding='utf8') as fp:
     catalog = Catalog(json.load(fp, object_pairs_hook=OrderedDict))
